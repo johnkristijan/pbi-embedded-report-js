@@ -1,0 +1,43 @@
+# How to embed a PBI report in a web page using JavaScript
+
+## prerequisites
+- in your cli/cmd: `npm i -g http-server`
+- a pbi report uploaded to `https://app.powerbi.com/`
+- install PowerBI powershell cmdlets: `Install-Module -Name MicrosoftPowerBIMgmt`
+
+## establish report parameters
+1. Generate an `accessToken`
+2. Obtain an `embedUrl`
+3. Find the `id` of the pbi report
+4. set `permissions` and `tokenType`
+
+see more:
+https://learn.microsoft.com/nb-no/javascript/api/overview/powerbi/embed-report
+
+
+## run local server to test it!
+1. in your cli/cmd: `http-server ./`
+2. visit `localhost:8080` in your browser
+
+## Get group ID and Report ID
+1. Open the report in the powerbi Portal
+2. snap the `GroupGUID` and the `ReportGUID` from the url
+
+e.g.: Group: c18b6e85-f88d-4200-9975-29ae8896c1aa | Report: e9cadf36-73d0-4e53-9b15-dc16a7049015
+
+## Build the embed url
+_replace guids, the square brackets should also be removed_ 
+https://app.powerbi.com/reportEmbed?reportId=[ReportGUID]&groupId=[GroupGUID]
+
+e.g.:
+`https://app.powerbi.com/reportEmbed?reportId=e9cadf36-73d0-4e53-9b15-dc16a7049015&groupId=c18b6e85-f88d-4200-9975-29ae8896c1aa` 
+
+## Get Access Token
+1. Open PowerShell
+2. `Login-PowerBI`
+3. `Get-PowerBIAccessToken -AsString`
+4. Copy the text, except for the "Bearer " piece
+5. Note: This is not an `Embed token` - it is an `AAD` token!
+e.g.:
+
+`eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiJodHRwczovL2FuYWx5c2lzLndpbmRvd3MubmV0L3Bvd2VyYmkvYXBpIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvZjk5OWUyZTktNWFhOC00NjdmLTllY2EtZGYwZDZjNGVhZjEzLyIsImlhdCI6MTY3NjEyMTE1OSwibmJmIjoxNjc2MTIxMTU5LCJleHAiOjE2NzYxMjY4NTYsImFjY3QiOjAsImFjciI6IjEiLCJhaW8iOiJBVFFBeS84VEFBQUFweVhxZG5qZkx1dDB0MTRqMzFTRG1JSGIwTmVYZG1xOUlMU21hWjRmcUxWbTB3c1o1MUs1ME5NNUJFZkJHdTd1IiwiYW1yIjpbInB3ZCJdLCJhcHBpZCI6IjIzZDhmNmJkLTFlYjAtNGNjMi1hMDhjLTdiZjUyNWM2N2JjZCIsImFwcGlkYWNyIjoiMCIsImZhbWlseV9uYW1lIjoiSGVybWFubiIsImdpdmVuX25hbWUiOiJKb2huIEtyaXN0aWphbiIsImlwYWRkciI6Ijc4LjE1Ni4xMi4xNTQiLCJuYW1lIjoiSm9obiBLcmlzdGlqYW4gSGVybWFubiAoZWtzdGVybiBrb25zdWxlbnQpIiwib2lkIjoiN2NiYmVhMDItZmNmZS00ZmViLTk3MTItYzM0YTBlYmIxODA1Iiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTQxNzIzODc1NjctMzE0NTE4NDcxMC0xNTUwNzgwNTU4LTEwNDI2IiwicHVpZCI6IjEwMDMyMDAyMDUwRTY4RDEiLCJyaCI6IjAuQVVnQTZlS1otYWhhZjBhZXl0OE5iRTZ2RXdrQUFBQUFBQUFBd0FBQUFBQUFBQUJJQUNzLiIsInNjcCI6IkFwcC5SZWFkLkFsbCBDYXBhY2l0eS5SZWFkLkFsbCBDYXBhY2l0eS5SZWFkV3JpdGUuQWxsIENvbnRlbnQuQ3JlYXRlIERhc2hib2FyZC5SZWFkLkFsbCBEYXNoYm9hcmQuUmVhZFdyaXRlLkFsbCBEYXRhZmxvdy5SZWFkLkFsbCBEYXRhZmxvdy5SZWFkV3JpdGUuQWxsIERhdGFzZXQuUmVhZC5BbGwgRGF0YXNldC5SZWFkV3JpdGUuQWxsIEdhdGV3YXkuUmVhZC5BbGwgR2F0ZXdheS5SZWFkV3JpdGUuQWxsIFBpcGVsaW5lLkRlcGxveSBQaXBlbGluZS5SZWFkLkFsbCBQaXBlbGluZS5SZWFkV3JpdGUuQWxsIFJlcG9ydC5SZWFkLkFsbCBSZXBvcnQuUmVhZFdyaXRlLkFsbCBTdG9yYWdlQWNjb3VudC5SZWFkLkFsbCBTdG9yYWdlQWNjb3VudC5SZWFkV3JpdGUuQWxsIFRlbmFudC5SZWFkLkFsbCBUZW5hbnQuUmVhZFdyaXRlLkFsbCBVc2VyU3RhdGUuUmVhZFdyaXRlLkFsbCBXb3Jrc3BhY2UuUmVhZC5BbGwgV29ya3NwYWNlLlJlYWRXcml0ZS5BbGwiLCJzdWIiOiJ5Q2xXMjAxOUJUd2MxZHc0WmZSdTJrbU1mR3h4djRIeWV6UlZHTDFqN3BnIiwidGlkIjoiZjk5OWUyZTktNWFhOC00NjdmLTllY2EtZGYwZDZjNGVhZjEzIiwidW5pcXVlX25hbWUiOiJla3N0ZXJuX2pvaGhlckBtaWxqb2Rpci5ubyIsInVwbiI6ImVrc3Rlcm5fam9oaGVyQG1pbGpvZGlyLm5vIiwidXRpIjoiN25oZDB3VFdlVXlaOWg2OEQ1TWRBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il19.HG8q7P9fdFYEgGQz3CwkPNh_UONyqtqTbd34R5Y_z1n5dJjuJoYj4rpWhAFmcB9fGU-vFr4rqJ-mn4tpxIdm5-rjjSkXQ9e9dQ2SXtz_DUva_vYv3Ro1_oK6EYMfAgcztcU1WyHb8qZCTK35JKrZx-Pweo0QeljrYcLaIwLg_cgCJmXIQQAz1yMB2R1PYXFOW9OXhPKesBQgVX2Rr7EI98ugLOdbVJCCXsrQeID9PATAOgZg2KVKJb6ZaxTwIDXIaMwmAdb2yAzuerjiHhBoFJvjEwLJBOam3BQlypoJzzI4DCcBQ0nWW0bZ6aQ5o2KBYKqpAQvU_4YFHkflrBBACA` 

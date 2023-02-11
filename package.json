@@ -1,27 +1,19 @@
 {
   "name": "pbi-embedded-report",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "Example how to embed a PowerBI report in a web page using vanilla JavaScript",
+  "main": "index.html",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/johnkristijan/pbi-embedded-report-js.git"
   },
   "keywords": [
     "pbi",
+    "powerbi",
     "javascript",
     "embedded"
   ],
   "author": "John K Hermann",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/johnkristijan/pbi-embedded-report-js/issues"
-  },
   "homepage": "https://github.com/johnkristijan/pbi-embedded-report-js#readme",
-  "dependencies": {
-    "powerbi-client": "^2.22.2"
-  }
 }
